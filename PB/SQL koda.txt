@@ -1,0 +1,112 @@
+/*
+Created: 29.3.2016
+Modified: 29.3.2016
+Model: SQLite 3.7
+Database: SQLite 3.7
+*/
+
+-- Create tables section -------------------------------------------------
+
+-- Table Knjiga
+
+CREATE TABLE Knjiga
+(
+  IDKnjiga INTEGER NOT NULL,
+  Naslov_knjige TEXT NOT NULL,
+  Leto_izdaje NONE NOT NULL,
+  IDZalozba INTEGER NOT NULL,
+  Status TEXT,
+  IDAvtor INTEGER NOT NULL,
+  CONSTRAINT Key1 PRIMARY KEY (IDKnjiga,IDAvtor),
+  CONSTRAINT IDKnjiga UNIQUE (IDKnjiga),
+  CONSTRAINT Relationship5 FOREIGN KEY (IDZalozba) REFERENCES Zalozba (IDZalozba) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT Relationship11 FOREIGN KEY (IDAvtor) REFERENCES Avtor (IDAvtor)
+);
+
+-- Table Clan
+
+CREATE TABLE Clan
+(
+  IDClan INTEGER NOT NULL,
+  Ime TEXT NOT NULL,
+  Priimek TEXT NOT NULL,
+  Datum_rojstva NONE NOT NULL,
+  CONSTRAINT Key2 PRIMARY KEY (IDClan),
+  CONSTRAINT IDClan UNIQUE (IDClan)
+);
+
+-- Table Knjiznicar
+
+CREATE TABLE Knjiznicar
+(
+  IDKnjiznicar INTEGER NOT NULL,
+  Ime TEXT NOT NULL,
+  Priimek TEXT NOT NULL,
+  Datum_rojstva NONE NOT NULL,
+  CONSTRAINT Key3 PRIMARY KEY (IDKnjiznicar),
+  CONSTRAINT IDKnjiznicar UNIQUE (IDKnjiznicar)
+);
+
+-- Table Avtor
+
+CREATE TABLE Avtor
+(
+  IDAvtor INTEGER NOT NULL,
+  Ime TEXT NOT NULL,
+  Priimek TEXT NOT NULL,
+  Drzava TEXT,
+  Datum_rojstva NONE,
+  CONSTRAINT Key4 PRIMARY KEY (IDAvtor),
+  CONSTRAINT IDAvtor UNIQUE (IDAvtor)
+);
+
+-- Table Zalozba
+
+CREATE TABLE Zalozba
+(
+  IDZalozba INTEGER NOT NULL,
+  Naziv TEXT NOT NULL,
+  Naslov TEXT NOT NULL,
+  Posta INTEGER NOT NULL,
+  Kraj TEXT NOT NULL,
+  CONSTRAINT Key5 PRIMARY KEY (IDZalozba),
+  CONSTRAINT IDZalozba UNIQUE (IDZalozba)
+);
+
+-- Table Izposoja
+
+CREATE TABLE Izposoja
+(
+  IDClan INTEGER NOT NULL,
+  IDKnjiga INTEGER NOT NULL,
+  IDKnjiznicar INTEGER NOT NULL,
+  Datum_izposoje NONE NOT NULL,
+  Datum_vrnitve NONE NOT NULL,
+  IDAvtor INTEGER NOT NULL,
+  CONSTRAINT Key6 PRIMARY KEY (IDClan,IDKnjiga,IDKnjiznicar,IDAvtor),
+  CONSTRAINT Relationship8 FOREIGN KEY (IDKnjiznicar) REFERENCES Knjiznicar (IDKnjiznicar) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT Relationship7 FOREIGN KEY (IDKnjiga, IDAvtor) REFERENCES Knjiga (IDKnjiga, IDAvtor) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT Relationship6 FOREIGN KEY (IDClan) REFERENCES Clan (IDClan) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Table Kategorija
+
+CREATE TABLE Kategorija
+(
+  IDKategorija INTEGER NOT NULL,
+  Opis TEXT NOT NULL,
+  CONSTRAINT Key7 PRIMARY KEY (IDKategorija)
+);
+
+-- Table Je
+
+CREATE TABLE Je
+(
+  IDKnjiga INTEGER NOT NULL,
+  IDKategorija INTEGER NOT NULL,
+  IDAvtor INTEGER NOT NULL,
+  CONSTRAINT Key8 PRIMARY KEY (IDKnjiga,IDKategorija,IDAvtor),
+  CONSTRAINT Relationship10 FOREIGN KEY (IDKategorija) REFERENCES Kategorija (IDKategorija) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT Relationship9 FOREIGN KEY (IDKnjiga, IDAvtor) REFERENCES Knjiga (IDKnjiga, IDAvtor) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
